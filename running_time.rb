@@ -1,21 +1,25 @@
-def  insertionSort(ar) 
+def  insertionSort(gets gets) 
 	shifts = 0
-	ar.each_with_index do |x, index|
+	arr = ar
+	arr = ar.split(' ') if ar.class == String
+
+	arr.each_with_index do |x, index|
 		i = index
 
-		index.downto(0) do |n|
-			if x.to_i < ar[n].to_i
-				ar[i] = ar[n].to_i
+		index.downto(1) do |n|
+			if x.to_i < arr[n].to_i
+				arr[i] = arr[n].to_i
 				i = n;
 				shifts += 1
 			end
 		end
-		ar[i] = x.to_i
+		arr[i] = x.to_i
 	end
-
-	$stdout.puts "#{shifts}"
+	puts shifts
 end
 
+arr = gets
+arr += gets
 
-insertionSort [2, 1, 3, 1, 2]
+insertionSort arr
 
