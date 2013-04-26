@@ -2,59 +2,70 @@
 
 class Med
 	:number_list
+	DEBUG = false
 
 	def median (action)
 		actions = action.split(' ')
+		puts "action #{actions.inspect}" if DEBUG
 
-		add_or_remove = actions[0]
-		number = actions[1].to_i
-
-		if add_or_remove == 'a'
-			@number_list.push(number)
-			puts get_median @number_list if @number_list.length >= 1
-		elsif add_or_remove == 'r' && @number_list.last == number || !@number_list.empty?
-			@number_list.pop
-			puts (get_median @number_list) if @number_list.length >= 1
-			puts "Wrong!" if @number_list.length == 0
-		else 
-			puts "Wrong!"
+		if actions[0] == 'a'
+			@number_list.push(actions[1].to_i)
+			puts get_median @number_list
+		elsif actions[0] == 'r'
+			# binding.pry if actions[1].to_i == 100
+			num_del = @number_list.index(actions[1].to_i)
+			
+			if !num_del.nil?
+				@number_list.delete_at(num_del) 
+				puts (get_median @number_list) if !@number_list.empty?
+				puts "Wrong!" if @number_list.empty?
+			else
+				puts "Wrong!"
+			end
 		end
 
-		# puts @number_list.inspect
 	end
 
 	def get_median num_list
 		list = num_list.sort
-		# puts list.inspect
+		len = list.length
+		puts " sorted - #{list.inspect}" if DEBUG
+
+		if len % 2 != 0
+			m = list[(len / 2)]
+		else 
+			m = (list[(len / 2) - 1] + list[(len / 2)])  / 2.0
+			mi = m.to_i
+			if mi == m
+				mi
+			else
+				m
+			end
+
 			# binding.pry
-		return list.first if list.length < 2
-
-		# if even and more than 2
-		if list.length % 2 == 0 && list.length > 2
-			index = list.length / 2
-			m = (list[index -1 ] + list[index + 1]) / 2.0
-
-		# if even and 2 in the list
-		elsif list.length % 2 == 0 && list.length == 2
-			# binding.pry
-			m = (list[0] + list[1]) / 2.0 
-
-		# if odd median is middle
-		elsif list.length % 2 != 0 
-			index = (list.length / 2).ceil
-			m = list[index]
 		end
 	end
 
 
 	def main
 		@number_list = []
-		count = gets
+
+		file = File.open("input_median01.txt", "rb")
+		input = file.read
+		input = input.split("\n")
+
+		count = input.length
+		# count = gets
+		# binding.pry
 		0.upto(count.to_i - 1) do |number|
-			median gets
+			median input[number]
+			# median gets
+			puts "-------------------" if DEBUG
+			puts "unsorted - #{@number_list.inspect}" if DEBUG
 		end
 	end
 end
+
 
 med = Med.new
 med.main
