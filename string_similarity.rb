@@ -13,7 +13,9 @@ class Simil
 	def similar tstring
 		puts "strings #{tstring.chomp.inspect}" if DEBUG
 		
-		ref_str = tstring.chomp
+		ref_str = tstring.chomp.downcase
+		return if ref_str.length >= 100000
+
  		str_parsed = parse_string ref_str
 
  		0.upto(@string_list.length-1) do |line|
@@ -51,7 +53,8 @@ class Simil
 		# t = 1 
 		# ts = "ababaa"
 		t = gets.to_i
-		
+		return if t < 1 && t > 10
+
 		0.upto(t-1) do
 			similar gets.to_s
 			@string_list = @list_simil = []
